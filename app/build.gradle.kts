@@ -47,3 +47,30 @@ tasks.named<Test>("test") {
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters")
 }
+
+tasks.register<Delete>("cleanDist") {
+    delete("src/main/resources/static/*")
+}
+
+tasks.register<Exec>("buildFrontend") {
+    dependsOn("cleanDist")
+    workingDir = file("../../Frontend")
+    commandLine = listOf("C:/Program Files/nodejs/npm.cmd", "run", "build")
+}
+
+tasks.register<Copy>("copyFrontend") {
+    dependsOn("buildFrontend")
+    from("../../Frontend/dist")
+    into("src/main/resources/static")
+    doLast {
+        println("Frontend-Dateien wurden kopiert")
+    }
+}
+
+tasks.named("processResources") {
+    dependsOn("copyFrontend")
+}
+
+tasks.named("bootRun") {
+    dependsOn("copyFrontend")
+}

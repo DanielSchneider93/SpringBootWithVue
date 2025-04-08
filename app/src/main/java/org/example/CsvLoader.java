@@ -26,7 +26,7 @@ public class CsvLoader {
 
     public void loadCsv() {
         try {
-            var resource = new ClassPathResource("static/sample-input.csv");
+            var resource = new ClassPathResource("sample-input.csv");
             var file = resource.getFile();
             if (file.exists()) {
                 this.csv = file;
